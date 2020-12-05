@@ -39,7 +39,7 @@
   # so we don't want to provide the installation configuration.nix.
   installer.cloneConfig = false;
 
-  fileSystems = lib.mkForce {
+  fileSystems = {
       # There is no U-Boot on the Pi 4, thus the firmware partition needs to be mounted as /boot.
       "/boot" = {
           device = "/dev/disk/by-label/FIRMWARE";

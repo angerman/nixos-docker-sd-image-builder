@@ -1,0 +1,9 @@
+[submodule "rockpi4-node/manjaro-linux-aarch64"]
+	path = rockpi4-node/manjaro-linux-aarch64
+	url = https://gitlab.manjaro.org/manjaro-arm/packages/core/linux-aarch64.git
+[submodule "rockpi4-node/radxa-kernel"]
+	path = rockpi4-node/radxa-kernel
+	url = https://github.com/radxa/kernel.git
+[submodule "srcs/nix-odroid-n2"]
+	path = srcs/nix-odroid-n2
+	url = https://github.com/wav/nix-odroid-n2

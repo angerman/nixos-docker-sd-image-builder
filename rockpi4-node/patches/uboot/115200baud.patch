@@ -1,0 +1,13 @@
+diff --git a/arch/arm/dts/rk3399-rock-pi-4.dts b/arch/arm/dts/rk3399-rock-pi-4.dts
+index 4a543f211..bfb064007 100644
+--- a/arch/arm/dts/rk3399-rock-pi-4.dts
++++ b/arch/arm/dts/rk3399-rock-pi-4.dts
+@@ -15,7 +15,7 @@
+ 	compatible = "radxa,rockpi4", "rockchip,rk3399";
+ 
+ 	chosen {
+-		stdout-path = "serial2:1500000n8";
++		stdout-path = "serial2:115200n8";
+ 	};
+ 
+ 	clkin_gmac: external-gmac-clock {

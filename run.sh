@@ -9,6 +9,9 @@ fi
 
 echo "detecting architecture..."
 
+if [ -z "$NIXOS_CONFIG" ]; then
+  export NIXOS_CONFIG=config/sd-image.nix
+fi
 # Image base to use. The trick to allow this to work painlessly on both x86 and AArch64 is just
 # a magic trick which involves prepending `arm64v8/` when building natively.
 export IMAGE_BASE=
@@ -28,7 +31,7 @@ arm|armel|armhf|arm64|armv[4-9]*l|aarch64)
   ;;
 esac
 
-# Default 
+# Default
 readonly COMPOSE_ACTION="${1-up}"
 [ "$#" -ne 0 ] && shift
 
