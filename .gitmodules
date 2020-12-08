@@ -7,3 +7,6 @@
 [submodule "srcs/nix-odroid-n2"]
 	path = srcs/nix-odroid-n2
 	url = https://github.com/wav/nix-odroid-n2
+[submodule "armbian"]
+	path = armbian
+	url = git@github.com:armbian/build.git

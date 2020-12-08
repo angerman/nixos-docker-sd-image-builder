@@ -44,7 +44,7 @@ new file mode 100644
 index 0000000000000..2a561be724b22
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-kobol-helios64.dts
-@@ -0,0 +1,372 @@
+@@ -0,0 +1,387 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2020 Aditya Prayoga <aditya@kobol.io>
@@ -359,6 +359,22 @@ index 0000000000000..2a561be724b22
 +	status = "okay";
 +};
 +
++&pcie0 {
++	num-lanes = <2>;
++	max-link-speed = <2>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie_prst &pcie_clkreqn_cpm>;
++	vpcie12v-supply = <&vcc12v_dcin>;
++	vpcie3v3-supply = <&pcie_power>;
++	vpcie1v8-supply = <&avdd_1v8_s0>;
++	vpcie0v9-supply = <&avdd_0v9_s0>;
++	status = "okay";
++};
++
++&pcie_phy {
++	status = "okay";
++};
++
 +&pinctrl {
 +	gmac {
 +		gphy_reset: gphy-reset {
@@ -417,6 +433,5 @@ index 0000000000000..2a561be724b22
 +&uart2 {
 +	status = "okay";
 +};
--- 
+--
 cgit 1.2.3-1.el7
-
