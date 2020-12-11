@@ -3,9 +3,14 @@
   imports = [
     <nixpkgs/nixos/modules/profiles/base.nix>
     <nixpkgs/nixos/modules/profiles/installation-device.nix>
-    <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
+    # <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
     # <nixpkgs/nixos/modules/installer/cd-dvd/sd-image-aarch64.nix>
     ../shared/common.nix
+
+    # helios64 specific
+    ./modules/fancontrol.nix
+    ./modules/ups.nix
+    ./modules/heartbeat.nix
   ];
 
   nixpkgs.overlays = [
@@ -14,16 +19,30 @@
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
+  boot.consoleLogLevel = lib.mkDefault 7;
+
+  # !!! Important: Do *not* add ttyS0 into this list. It will break ttyS2,
+  #     and even crash the system if you interact with ttyS2 if ttyS0 is defined.
   boot.kernelParams = [
     "cma=32M"
-    # "console=ttyS0,115200n8"
-    # "console=ttyS1,115200n8"
     "console=ttyS2,115200n8"
     "earlycon=uart8250,mmio32,0xff1a0000"
     "earlyprintk"
     "loglevel=7"
   ];
 
+  # this one will set the usb net ethernet into the right mode
+  # and stop it from spamming the console.
+  services.udev.packages = [
+    (pkgs.callPackage ./pkgs/udev/usb-net.nix {})
+  ];
+
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/NIXOS_SD";
+      fsType = "ext4";
+    };
+  };
 
   # See also Debians state of the art:
   # https://wiki.debian.org/InstallingDebianOn/Kobol/Helios64
@@ -177,6 +196,8 @@
           { name = "zzzzz-add-make-rk3328-roc-pc"; patch = prefix + "/zzzzz-add-make-rk3328-roc-pc.patch"; }
           { name = "zzzzz-add-rk3328-dtsi"; patch = prefix + "/zzzzz-add-rk3328-dtsi.patch"; }
           { name = "zzzzz-add-rk3328-roc-pc"; patch = prefix + "/zzzzz-add-rk3328-roc-pc.patch"; }
+
+          { name = "115200 baud"; patch = ./patches/kernel/115200baud.patch; }
         ];
         # generated with: cat linux-rockchip64-current.config |grep -v "^#" |grep -v "^$"|sed s/^CONFIG_//g |sed s/=/\ /g
         #
@@ -196,6 +217,14 @@
         # SYSTEM_BLACKLIST_KEYRING y
         #
 
+        # Disable these, as they'll spam the console otherwise.
+        # Something's wrong with the CDC_NCM driver.
+        #
+        # See also: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1832472
+        #
+        # USB_NET_CDC_NCM n
+        # USB_NET_HUAWEI_CDC_NCM n
+        # USB_NET_CDC_MBIM n
 
         extraConfig = ''
           IRQ_WORK y
@@ -5760,13 +5789,6 @@
           MEMTEST y
           '';
       };
-  };
-
-  sdImage = {
-    populateRootCommands = ''
-      mkdir -p ./files/boot
-      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
-    '';
   };
 
   # the installation media is also the installation target,

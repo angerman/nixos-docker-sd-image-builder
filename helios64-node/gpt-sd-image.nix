@@ -1,5 +1,9 @@
 { config, lib,  pkgs, ... }:
 {
+  imports = [
+    <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
+  ];
+
   system.build.sdImage = with lib;
     let
         rootfsImage = pkgs.callPackage <nixpkgs/nixos/lib/make-ext4-fs.nix> ({

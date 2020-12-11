@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
     nixops
   ];
 
-  revision = "1aa5271117107032e13f07bf025e3c4d26db8915"; # nixos-20.03 on 2020-06-07
+  revision = "65c9cc79f1d179713c227bf447fb0dac384cdcda"; # nixos-20.09 on 2020-12-11
 
 
   shellHook = ''
 
-    export NIX_PATH="nixpkgs=https://github.com/NixOs/nixpkgs-channels/archive/${revision}.tar.gz:."
+    export NIX_PATH="nixpkgs=https://github.com/NixOs/nixpkgs/archive/${revision}.tar.gz:."
     export NIXOPS_STATE="./secrets/state.nixops"
 
     function our_create () {
